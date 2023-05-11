@@ -39,19 +39,19 @@ describe("yjs storage provider", () => {
         let value2: WalletContent2020 = await yjss.Get(rv.id)
 
         expect(value2).not.toBeUndefined()
-        console.log("value2", value2)
+        // console.log("value2", value2)
 
         expect(rv.id).toBe(value2.id)
         const blob = await yjss.Export()
 
-        console.log("blob", blob)
+        // console.log("blob", blob)
         let yjss2 = new YJSStorageProvider("test2")
         await yjss2.Import(blob)
 
         let value3: WalletContent2020 = await yjss2.Get(rv.id)
 
         expect(value3).not.toBeUndefined()
-        console.log("value3", value3)
+        // console.log("value3", value3)
 
         expect(rv.id).toBe(value3.id)
 
@@ -75,7 +75,7 @@ describe("yjs storage provider", () => {
         expect(rv.id).toBe(value2.id)
         const blob = await yjss.Export()
 
-        console.log("blob", blob)
+        // console.log("blob", blob)
         let yjss2 = new YJSStorageProvider("test")
         await yjss2.IsReady()
         // await yjss2.Import(blob)
@@ -83,7 +83,7 @@ describe("yjs storage provider", () => {
         let value3: WalletContent2020 = await yjss2.Get(rv.id)
 
         expect(value3).not.toBeUndefined()
-        console.log("value3", value3)
+        // console.log("value3", value3)
 
         expect(rv.id).toBe(value3.id)
 
@@ -95,6 +95,42 @@ describe("yjs storage provider", () => {
         let value4: WalletContent2020 = await yjss3.Get(rv.id)
 
         expect(value4).toBeUndefined()
+    })
+
+    test("query storage", async ()=>{
+        let yjss = new YJSStorageProvider("test4")
+        let ready = await yjss.IsReady()
+        expect(ready).toBe(true)
+        let rv = features[1]
+        let promises:Promise<void>[] = []
+        features.forEach((value)=>{
+            let prom = yjss.Put(value)
+            promises.push(prom)
+        })
+        await Promise.all(promises)
+        let QueryRequestByType = {
+            type: "Predicate",
+            credentialQuery: (value) => {
+                return value.type == "test"
+            },
+        }
+        let contentsByType: WalletContent2020[] = await yjss.Query(QueryRequestByType)
+
+        expect(contentsByType).not.toBeUndefined()
+
+        expect(contentsByType.length).toBe(features.length)
+
+        let QueryRequestById = {
+            type: "Predicate",
+            credentialQuery: (value) => {
+                return value.id == "test:1"
+            },
+        }
+        let contentsById: WalletContent2020[] = await yjss.Query(QueryRequestById)
+
+        expect(contentsById).not.toBeUndefined()
+
+        expect(contentsById.length).toBe(1)
     })
 
 })

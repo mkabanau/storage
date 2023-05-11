@@ -5,6 +5,7 @@ export interface StorageProvider {
 
 interface Id {
     id: string
+    [name:string]:any
 }
 
 export interface IStorage {

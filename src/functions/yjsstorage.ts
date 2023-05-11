@@ -48,9 +48,9 @@ export class YJSStorageProvider implements IStorage {
         return result
     }
 
-    async Query(opts: QueryContent2020): Promise<any> {
-        if (opts.ById) {
-            return this.Get(opts.ById)
+    async Query(opts: QueryContent2020): Promise<any[]> {
+        if (opts.type == "Predicate" &&  typeof opts.credentialQuery === "function") {
+            return (await this.Contents()).filter(opts.credentialQuery)
         }
         throw Error(`query By ${opts} is not implemented`)
     }

@@ -1,6 +1,6 @@
 {
   "name": "@mkabanau/yjs-storage",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "yjs-storage",
   "exports": {
     ".": {
@@ -95,7 +95,7 @@
     "@mkabanau:registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
-    "@mkabanau/components": "^0.0.1",
+    "@mkabanau/components": "^0.0.2",
     "@mkabanau/core": "^0.11.4-test4",
     "@mkabanau/default-plugins": "^0.11.4-test1",
     "@mkabanau/ucans": "^0.11.4-test1",
